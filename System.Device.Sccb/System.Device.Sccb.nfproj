@@ -39,11 +39,11 @@
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="I2cBusSpeed.cs" />
-    <Compile Include="I2cConnectionSettings.cs" />
-    <Compile Include="I2cDevice.cs" />
-    <Compile Include="I2cTransferResult.cs" />
-    <Compile Include="I2cTransferStatus.cs" />
+    <Compile Include="SccbBusSpeed.cs" />
+    <Compile Include="SccbConnectionSettings.cs" />
+    <Compile Include="SccbDevice.cs" />
+    <Compile Include="SccbTransferResult.cs" />
+    <Compile Include="SccbTransferStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

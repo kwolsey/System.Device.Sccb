@@ -4,20 +4,20 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Device.I2c
+namespace System.Device.Sccb
 {
     /// <summary>
-    /// The communications channel to a device on an I2C bus.
+    /// The communications channel to a device on an Sccb bus.
     /// </summary>
-    public class I2cDevice : IDisposable
+    public class SccbDevice : IDisposable
     {
-        // this is used as the lock object 
+        // this is used as the lock object
         // a lock is required because multiple threads can access the device
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private readonly object _syncLock;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
-        private readonly I2cConnectionSettings _connectionSettings;
+        private readonly SccbConnectionSettings _connectionSettings;
 
         [Diagnostics.DebuggerBrowsable(Diagnostics.DebuggerBrowsableState.Never)]
         private bool _disposed;
@@ -26,15 +26,15 @@ namespace System.Device.I2c
         private readonly byte[] _buffer;
 
         /// <summary>
-        /// The connection settings of a device on an I2C bus. The connection settings are immutable after the device is created
+        /// The connection settings of a device on an Sccb bus. The connection settings are immutable after the device is created
         /// so the object returned will be a clone of the settings object.
         /// </summary>
-        public I2cConnectionSettings ConnectionSettings { get => _connectionSettings; } 
+        public SccbConnectionSettings ConnectionSettings { get => _connectionSettings; }
 
         /// <summary>
-        /// Reads a byte from the I2C device.
+        /// Reads a byte from the Sccb device.
         /// </summary>
-        /// <returns>A byte read from the I2C device.</returns>
+        /// <returns>A byte read from the Sccb device.</returns>
         public byte ReadByte()
         {
             lock (_syncLock)
@@ -48,13 +48,13 @@ namespace System.Device.I2c
         }
 
         /// <summary>
-        /// Reads data from the I2C device.
+        /// Reads data from the Sccb device.
         /// </summary>
         /// <param name="buffer">
-        /// The buffer to read the data from the I2C device.
-        /// The length of the buffer determines how much data to read from the I2C device.
+        /// The buffer to read the data from the Sccb device.
+        /// The length of the buffer determines how much data to read from the Sccb device.
         /// </param>
-        public I2cTransferResult Read(SpanByte buffer)
+        public SccbTransferResult Read(SpanByte buffer)
         {
             lock (_syncLock)
             {
@@ -63,10 +63,10 @@ namespace System.Device.I2c
         }
 
         /// <summary>
-        /// Writes a byte to the I2C device.
+        /// Writes a byte to the Sccb device.
         /// </summary>
-        /// <param name="value">The byte to be written to the I2C device.</param>
-        public I2cTransferResult WriteByte(byte value)
+        /// <param name="value">The byte to be written to the Sccb device.</param>
+        public SccbTransferResult WriteByte(byte value)
         {
             lock (_syncLock)
             {
@@ -78,13 +78,13 @@ namespace System.Device.I2c
         }
 
         /// <summary>
-        /// Writes data to the I2C device.
+        /// Writes data to the Sccb device.
         /// </summary>
         /// <param name="buffer">
-        /// The buffer that contains the data to be written to the I2C device.
-        /// The data should not include the I2C device address.
+        /// The buffer that contains the data to be written to the Sccb device.
+        /// The data should not include the Sccb device address.
         /// </param>
-        public I2cTransferResult Write(SpanByte buffer)
+        public SccbTransferResult Write(SpanByte buffer)
         {
             lock (_syncLock)
             {
@@ -93,17 +93,17 @@ namespace System.Device.I2c
         }
 
         /// <summary>
-        /// Performs an atomic operation to write data to and then read data from the I2C bus on which the device is connected,
+        /// Performs an atomic operation to write data to and then read data from the Sccb bus on which the device is connected,
         /// and sends a restart condition between the write and read operations.
         /// </summary>
         /// <param name="writeBuffer">
-        /// The buffer that contains the data to be written to the I2C device.
-        /// The data should not include the I2C device address.</param>
+        /// The buffer that contains the data to be written to the Sccb device.
+        /// The data should not include the Sccb device address.</param>
         /// <param name="readBuffer">
-        /// The buffer to read the data from the I2C device.
-        /// The length of the buffer determines how much data to read from the I2C device.
+        /// The buffer to read the data from the Sccb device.
+        /// The length of the buffer determines how much data to read from the Sccb device.
         /// </param>
-        public I2cTransferResult WriteRead(SpanByte writeBuffer, SpanByte readBuffer)
+        public SccbTransferResult WriteRead(SpanByte writeBuffer, SpanByte readBuffer)
         {
             lock (_syncLock)
             {
@@ -112,20 +112,20 @@ namespace System.Device.I2c
         }
 
         /// <summary>
-        /// Creates a communications channel to a device on an I2C bus running on the current platform
+        /// Creates a communications channel to a device on an Sccb bus running on the current platform
         /// </summary>
-        /// <param name="settings">The connection settings of a device on an I2C bus.</param>
-        /// <returns>A communications channel to a device on an I2C bus</returns>
-        public static I2cDevice Create(I2cConnectionSettings settings)
+        /// <param name="settings">The connection settings of a device on an Sccb bus.</param>
+        /// <returns>A communications channel to a device on an Sccb bus</returns>
+        public static SccbDevice Create(SccbConnectionSettings settings)
         {
-            return new I2cDevice(settings);
+            return new SccbDevice(settings);
         }
 
         /// <summary>
-        /// Create an I2C Device
+        /// Create an Sccb Device
         /// </summary>
         /// <param name="settings">Connection settings</param>
-        public I2cDevice(I2cConnectionSettings settings)
+        public SccbDevice(SccbConnectionSettings settings)
         {
             _connectionSettings = settings;
 
@@ -135,7 +135,7 @@ namespace System.Device.I2c
             // create the lock object
             _syncLock = new object();
 
-            // call native init to allow HAL/PAL inits related with I2C hardware
+            // call native init to allow HAL/PAL inits related with Sccb hardware
             NativeInit();
         }
 
@@ -152,7 +152,8 @@ namespace System.Device.I2c
         }
 
 #pragma warning disable 1591
-        ~I2cDevice()
+
+        ~SccbDevice()
         {
             Dispose(false);
         }
@@ -173,7 +174,7 @@ namespace System.Device.I2c
             }
         }
 
-        #endregion
+        #endregion IDisposable Support
 
         #region external calls to native implementations
 
@@ -184,8 +185,8 @@ namespace System.Device.I2c
         private extern void NativeDispose();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern I2cTransferResult NativeTransmit(SpanByte writeBuffer, SpanByte readBuffer);
+        private extern SccbTransferResult NativeTransmit(SpanByte writeBuffer, SpanByte readBuffer);
 
-        #endregion
+        #endregion external calls to native implementations
     }
 }
